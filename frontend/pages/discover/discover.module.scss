@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  overflow: hidden;
+  padding: 1em;
+  height: 100%;
+
+  .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    .pass, .like {
+      width: 3em;
+      height: 3em;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    }
+  }
+}

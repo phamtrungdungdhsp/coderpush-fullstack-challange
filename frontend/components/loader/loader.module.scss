@@ -1,0 +1,35 @@
+.loading {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  position: relative;
+  width: 5em;
+  height: 2.5em;
+  
+
+  .item {
+    width: 0.5em;
+    height: 1em;
+    background: #424242;
+    animation: loading 1s infinite;
+  }
+
+  @for $i from 1 through 7 {
+    .item:nth-child(#{$i}) {
+      animation-delay: #{$i * 0.16}s;
+    }
+  }
+}
+
+@keyframes loading {
+  0% {
+    height: 1.5em;
+  }
+  50% {
+    height: 2.5em;
+  }
+  100% {
+    height: 1.5em;
+  }
+}

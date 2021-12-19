@@ -1,0 +1,33 @@
+.wrapper {
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+  background: #E6E6FA;
+  position: relative;
+  .container {
+    border-radius: 1rem;
+    width: 20rem;
+    background: #FFF;
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translate(-50%, -50%);
+    .navLink {
+      margin: 0;
+      padding: 1em;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      list-style: none;
+      box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 5px;
+      li {
+        cursor: pointer;
+      }
+    }
+
+    main {
+      max-height: calc(90vh - 2em);
+      height: 35em;
+    }
+  }
+}
