@@ -3,7 +3,7 @@ import { fetchingAPI } from './index'
 
 export const getUsers = (page = 1, limit = 10) => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { data, error } = useSWR(`https://dummyapi.io/data/v1/user?page=${page}&limit=${limit}`, fetchingAPI)
+  const { data, error } = useSWR(`http://localhost:3333/api/users?page=${page}&limit=${limit}`, fetchingAPI)
   
   return {
     listUser: data?.data || [],

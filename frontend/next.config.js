@@ -11,6 +11,6 @@ module.exports = {
     ]
   },
   images: {
-    domains: ['images.unsplash.com', 'randomuser.me']
+    domains: ['images.unsplash.com', 'randomuser.me', 'placeimg.com']
   }
 }
