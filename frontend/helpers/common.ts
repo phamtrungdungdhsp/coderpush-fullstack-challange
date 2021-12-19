@@ -1,0 +1,1 @@
+export const handleName = (firstName: string, lastName: string) => `${firstName || ''} ${lastName || ''}`

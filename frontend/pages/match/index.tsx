@@ -5,9 +5,11 @@ import styles from './matches.module.scss'
 import { getUsers } from '../../lib/user'
 import Loader from '../../components/loader'
 import ScrollBottom from '../../components/scroll-bottom'
+import { handleName } from '../../helpers/common'
+import { IUser } from '../../interfaces/common'
 
 const List = ({ page }: { page: number }) => {
-  const { listUser: listMatches, isLoading } = getUsers(page || 1)
+  const { listUser, isLoading }: { listUser: IUser[], isLoading: boolean } = getUsers(page || 1)
   if (isLoading) {
     return (
       <div className="backdrop">
@@ -17,16 +19,17 @@ const List = ({ page }: { page: number }) => {
       </div>
     )
   }
+  
   return (
     <>
       {
-        listMatches.length && listMatches.map((person: any, index: number) => (
+        listUser.length && listUser.map((person: IUser, index: number) => (
           <li className={styles.item} key={index}>
             <div className={styles.image}>
               <Image src={person.picture} layout="fill" objectFit="cover" className={styles.img} alt={person.id} />
             </div>
             <div className={styles.info}>
-              <p className={styles.name}>{person.firstName} {person.lastName}</p>
+              <p className={styles.name}>{handleName(person.firstName, person.lastName)}</p>
               <p className={styles.age}>{person.age || 22}</p>
             </div>
           </li>

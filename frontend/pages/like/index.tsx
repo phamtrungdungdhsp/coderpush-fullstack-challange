@@ -5,9 +5,10 @@ import ScrollBottom from '../../components/scroll-bottom'
 import Loader from '../../components/loader'
 import { getUsers } from '../../lib/user'
 import styles from './like.module.scss'
+import { IUser } from '../../interfaces/common'
 
 const List = ({ page }: { page: number }) => {
-  const { listUser, isLoading } = getUsers(page || 1)
+  const { listUser, isLoading }: { listUser: IUser[], isLoading: boolean } = getUsers(page || 1)
   if (isLoading) {
     return (
       <div className="backdrop">
@@ -17,12 +18,13 @@ const List = ({ page }: { page: number }) => {
       </div>
     )
   }
+  
   return (
     <>
       {
-        listUser && listUser.map((person: any, index: number) => (
+        listUser && listUser.map((person: IUser, index: number) => (
           <div className={styles.image} key={index}>
-            <Card src={person.picture} name="Milly Norman" age={28} />
+            <Card person={person}/>
           </div>
         ))
       }

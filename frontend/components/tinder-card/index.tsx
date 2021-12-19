@@ -7,7 +7,8 @@ import Loader from '../../components/loader'
 React.useLayoutEffect = React.useEffect
 
 const Tinder = ({ page, changePage }: { page: number, changePage: any }, ref: any) => {
-  const { listUser, isLoading } = getUsers(page || 1)  
+  const { listUser, isLoading } = getUsers(page || 1)
+  
   const [currentIndex, setCurrentIndex] = useState(listUser.length - 1)
   useEffect(() => {
     setCurrentIndex(listUser.length - 1)
@@ -65,7 +66,7 @@ const Tinder = ({ page, changePage }: { page: number, changePage: any }, ref: an
           <TinderCard
             ref={childRefs[index]}
             className={styles.swipe}
-            key={person.id}
+            key={index}
             onSwipe={(dir: string) => swiped(index, dir)}
             onCardLeftScreen={() => outOfFrame(index)}
             preventSwipe={['up', 'down']}
