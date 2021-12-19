@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Layout from '../../components/layout'
 import styles from './matches.module.scss'

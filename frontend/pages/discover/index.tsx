@@ -12,7 +12,6 @@ const Discover = () => {
   const changePage = () => {
     setPage(page + 1)
   }
-
   const pass = (): void => {
     ref.current?.swipe('left')
   }

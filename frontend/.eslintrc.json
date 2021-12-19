@@ -1,3 +1,12 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["eslint:recommended", "next/core-web-vitals"],
+  "rules": {
+    "eqeqeq": "warn",
+    "no-empty": "warn",
+    "quotes": [2, "single"],
+    "no-console": "error",
+    "comma-dangle": ["error", "never"],
+    "max-len": ["warn", 140],
+    "semi": [2, "never"]
+  }
 }

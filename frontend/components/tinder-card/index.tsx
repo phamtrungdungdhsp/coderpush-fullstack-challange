@@ -21,22 +21,32 @@ const Tinder = ({ page, changePage }: { page: number, changePage: any }, ref: an
     setCurrentIndex(index)
     currentIndexRef.current = index
     if (index < 0) {
-      setTimeout(() => changePage(), 200)
+      changePage()
     }
   }
 
   const outOfFrame = (index: number): void => {
-    currentIndexRef.current >= index && childRefs[index]?.current.restoreCard();
+    currentIndexRef.current >= index && childRefs[index]?.current.restoreCard()
   }
   useImperativeHandle(ref, () => ({
     swipe: async (dir: string) => {
-      await childRefs[currentIndex]?.current?.swipe(dir)
+      try {
+        // TODO: call api pass/like
+        await childRefs[currentIndex]?.current?.swipe(dir)
+      } catch (e) {
+        // avoid unexpected error
+        // eslint-disable-next-line no-console
+        console.log(e)
+      }
     }
   }))
 
-  const swiped = (index: number): void => {
+  // eslint-disable-next-line no-unused-vars
+  const swiped = (index: number, dir: string): void => {
+    // TODO: call api pass/like
     updateCurrentIndex(index - 1)
   }
+
 
   if (isLoading) {
     return (
@@ -56,14 +66,17 @@ const Tinder = ({ page, changePage }: { page: number, changePage: any }, ref: an
             ref={childRefs[index]}
             className={styles.swipe}
             key={person.id}
-            onSwipe={() => swiped(index)}
+            onSwipe={(dir: string) => swiped(index, dir)}
             onCardLeftScreen={() => outOfFrame(index)}
             preventSwipe={['up', 'down']}
           >
             <Image src={person.picture} layout="fill" objectFit="cover" className={styles.image} alt={person.id} />
             <div className={styles.info}>
               <p><span className={styles.name}>Mily Norman</span>, <span  className={styles.age}>22</span></p>
-              <p className={styles.description}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius dolores quam alias culpa quos quod aliquid odio, ex harum veritatis ratione cupiditate incidunt voluptatum omnis explicabo nostrum accusamus soluta animi.</p>
+              <p className={styles.description}>
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Eius dolores quam alias culpa quos quod aliquid odio,
+                ex harum veritatis ratione cupiditate incidunt voluptatum omnis explicabo nostrum accusamus soluta animi.</p>
             </div>
           </TinderCard>
         ))}
