@@ -1,11 +1,18 @@
+import { useEffect } from 'react'
 import type { NextComponentType } from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styles from './layout.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faHeart, faComment } from '@fortawesome/free-solid-svg-icons'
-
+import { signIn } from '../../lib/user'
 const Layout: NextComponentType = ({ children }) => {
+  useEffect(() => {
+    const userId = localStorage.getItem('userId')
+    if (!userId) {
+      signIn()
+    }
+  }, [])
   const router = useRouter()
   return (
     <div className={styles.wrapper}>

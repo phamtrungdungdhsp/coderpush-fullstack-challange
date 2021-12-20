@@ -26,7 +26,7 @@ const List = ({ page }: { page: number }) => {
         listUser.length && listUser.map((person: IUser, index: number) => (
           <li className={styles.item} key={index}>
             <div className={styles.image}>
-              <Image src={person.picture} layout="fill" objectFit="cover" className={styles.img} alt={person.id} />
+              <Image src={person.picture} layout="fill" objectFit="cover" className={styles.img} alt={person.id} loading="lazy"/>
             </div>
             <div className={styles.info}>
               <p className={styles.name}>{handleName(person.firstName, person.lastName)}</p>

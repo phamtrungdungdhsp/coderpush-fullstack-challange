@@ -71,7 +71,7 @@ const Tinder = ({ page, changePage }: { page: number, changePage: any }, ref: an
             onCardLeftScreen={() => outOfFrame(index)}
             preventSwipe={['up', 'down']}
           >
-            <Image src={person.picture} layout="fill" objectFit="cover" className={styles.image} alt={person.id} />
+            <Image src={person.picture} layout="fill" objectFit="cover" className={styles.image} alt={person.id} loading="lazy" />
             <div className={styles.info}>
               <p><span className={styles.name}>Mily Norman</span>, <span  className={styles.age}>22</span></p>
               <p className={styles.description}>
