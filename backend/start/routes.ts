@@ -29,9 +29,11 @@ Route.post('/sign-in', 'UserController.signIn').prefix(API_PREFIX)
 
 Route.group(() => {
   Route.get('/users', 'UserController.getUser')
-  Route.get('/user/:userId', 'UserController.getDetail')
+  Route.get('/user/:userId/detail', 'UserController.getDetail')
+  Route.get('/user/like', 'UserController.getListLikedPersons')
   Route.post('/user/like', 'UserController.likePerson')
-  Route.post('/user/:userId', 'UserController.passPerson')
+  Route.post('/user/pass', 'UserController.passPerson')
+  Route.get('/user/match', 'UserController.getListMachtedPersons')
 })
   .middleware(['auth'])
   .prefix(API_PREFIX)

@@ -7,6 +7,7 @@ import User from '../Models/User'
 import Action from '../Models/Action'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { snakeToCamel } from 'App/Helpers'
+import Match from 'App/Models/Match'
 
 export default class UserService {
   /**
@@ -56,6 +57,8 @@ export default class UserService {
    * @return Promise<void>
    */
   public async likePerson (userId: number, targetId: number): Promise<void> {
+    console.log('go sss');
+    
     if (targetId === userId) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
      }
@@ -64,8 +67,17 @@ export default class UserService {
     if (!target) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
     }
-    await Action.create({ host: userId, target: targetId, action: EAction.like })
-    // TODO: Check if it's match
+    await Action.updateOrCreate({ host: userId }, { target: targetId, action: EAction.like })
+    
+    // Check if target liked userId, if yes => create match record
+    const liked: Action|null = await Action
+      .query()
+      .where({ target: userId })
+      .first()
+    if (liked) {
+      // firstUser always be less than secondUser
+      await Match.updateOrCreate({ firstUser: userId > targetId ? targetId : userId }, { secondUser:  userId > targetId ? userId : targetId })
+    }
   }
 
   
@@ -76,6 +88,9 @@ export default class UserService {
    * @return Promise<void>
    */
   public async passPerson (userId: number, targetId: number): Promise<void> {
+
+    console.log('go ss');
+    
     if (targetId === userId) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
     }
@@ -85,5 +100,50 @@ export default class UserService {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
     }
     await Action.create({ host: userId, target: targetId, action: EAction.pass })
+  }
+
+  /**
+   * Get people who you've liked
+   * @param userId
+   * @param page 
+   * @param limit 
+   * @returns 
+   */
+  public async getListLikedPersons (userId: number, page: number, limit: number): Promise<ModelPaginatorContract<Action>> {
+    const result = await Action
+      .query()
+      .preload('user')
+      .where({ host: userId, action: EAction.like })
+      .orderBy('id', 'desc')
+      .paginate(page, limit)
+    result.namingStrategy = camelPagination
+    return result
+  }
+
+  /**
+   * get list matched person
+   * @param userId
+   * @param page 
+   * @param limit 
+   * @returns 
+   */
+  public async getListMachtedPersons (userId: number, page: number, limit: number): Promise<ModelPaginatorContract<Match>> {
+    const result: any = await Match
+      .query()
+      .where({ firstUser: userId })
+      .orWhere({ secondUser: userId })
+      .orderBy('id', 'desc')
+      .paginate(page, limit)
+    
+    const ids: number[] = result.rows.reduce((array: number[], item: Match) => {
+      array.push(userId === item.firstUser ?  item.secondUser : item.firstUser)
+      return array
+    }, [])
+    const users: User[] = await User
+    .query()
+    .whereIn('id', ids)
+    result.rows = users
+    result.namingStrategy = camelPagination
+    return result
   }
 }

@@ -70,7 +70,7 @@
                   createdAt: "2021-12-20T00:07:43.000+07:00"
                   updatedAt: "2021-12-20T00:07:43.000+07:00"
 
-/api/user/{userId}:
+/api/user/{userId}/detail:
   get:
     tags:
       - "User"
@@ -119,6 +119,61 @@
                   message: User not found
 
 /api/user/like:
+  get:
+    tags:
+      - "User"
+    summary: Get list user
+    description: Get list user
+    parameters:
+      - in: header
+        name: userId
+        schema:
+          type: string
+          format: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          example: 10
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                meta:
+                  total: 2
+                  perPage: 1
+                  currentPage: 1
+                  lastPage: 2
+                  firstPage: 1
+                  firstPageUrl: "/?page=1"
+                  lastPageUrl: "/?page=2"
+                  nextPageUrl: "/?page=2"
+                  previousPageUrl: null
+                data:
+                  - id: 3
+                    host: 2
+                    target: 88
+                    action: "1"
+                    createdAt: "2021-12-22T00:48:48.000+07:00"
+                    updatedAt: "2021-12-22T00:49:42.000+07:00"
+                    user:
+                      id: 100
+                      firstName: Eva
+                      lastName: Donnelly
+                      age: 29
+                      picture: "http://placeimg.com/288/400/people?random=30591"
+                      createdAt: "2021-12-20T00:07:43.000+07:00"
+                      updatedAt: "2021-12-20T00:07:43.000+07:00"
   post:
     tags:
       - "User"
@@ -207,3 +262,53 @@
                 errors:
                   code: 2
                   message: You can not like/pass yourself
+
+/api/user/match:
+  get:
+    tags:
+      - "User"
+    summary: Get list matched user
+    description:  Get list matched user
+    parameters:
+      - in: header
+        name: userId
+        schema:
+          type: string
+          format: integer
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+          example: 1
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          example: 10
+    responses:
+      '200':
+        description: Success
+        content:
+          application/json:
+            schema:
+              type: object
+              example:
+                meta:
+                  total: 2
+                  perPage: 1
+                  currentPage: 1
+                  lastPage: 2
+                  firstPage: 1
+                  firstPageUrl: "/?page=1"
+                  lastPageUrl: "/?page=2"
+                  nextPageUrl: "/?page=2"
+                  previousPageUrl: null
+                data:
+                  - id: 100
+                    firstName: Eva
+                    lastName: Donnelly
+                    age: 29
+                    picture: "http://placeimg.com/288/400/people?random=30591"
+                    createdAt: "2021-12-20T00:07:43.000+07:00"
+                    updatedAt: "2021-12-20T00:07:43.000+07:00"

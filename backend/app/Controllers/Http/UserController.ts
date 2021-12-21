@@ -62,7 +62,27 @@ export default class UsersController {
   public async passPerson ({ request, response }: HttpContextContract) {
     const { id: userId } = request.auth
     const { targetId } = await request.validate(TargetValidator)
-    await this.userService.likePerson(userId, targetId)
+    await this.userService.passPerson(userId, targetId)
     return response.status(200).json({ data: null })
+  }
+
+  /**
+   * get list persons who you've like
+   * @param request
+   * @param response
+   * @returns Promise<any>
+   */
+  public async getListLikedPersons ({ request, response }: HttpContextContract) {
+    const { id: userId } = request.auth
+    const { page, limit } = formatPageAndLimit(request.only(['page', 'limit']))
+    const data = await this.userService.getListLikedPersons(userId, page, limit)
+    return response.status(200).json(data)
+  }
+
+  public async getListMachtedPersons ({ request, response }: HttpContextContract) {
+    const { id: userId } = request.auth
+    const { page, limit } = formatPageAndLimit(request.only(['page', 'limit']))
+    const data = await this.userService.getListMachtedPersons(userId, page, limit)
+    return response.status(200).json(data)
   }
 }

@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, hasOne, HasOne } from '@ioc:Adonis/Lucid/Orm'
 import { EAction } from '../../constants/Enum'
+import User from './User'
 
 export default class Action extends BaseModel {
   @column({ isPrimary: true })
@@ -20,4 +21,7 @@ export default class Action extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true, columnName: 'updated_at', serializeAs: 'updatedAt' })
   public updatedAt: DateTime
+
+  @hasOne(() => User, { localKey: 'target', foreignKey: 'id' })
+  public user: HasOne<typeof User>
 }

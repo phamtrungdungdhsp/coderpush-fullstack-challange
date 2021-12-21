@@ -31,6 +31,10 @@ npm run dev
 yarn dev
 ```
 
+5. Check the api docs
+
+Access: http://localhost:3333/docs
+
 ## Project Description
 
 This is the backend code of the Tinder-clone app.
