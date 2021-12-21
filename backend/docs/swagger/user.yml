@@ -117,3 +117,93 @@
                 errors:
                   code: 1
                   message: User not found
+
+/api/user/like:
+  post:
+    tags:
+      - "User"
+    summary: Like a person
+    description: Like a person
+    parameters:
+      - in: header
+        name: userId
+        schema:
+          type: string
+          format: integer
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            required:
+              - targetId
+            properties:
+              targetId:
+                type: number
+                example: 2
+    responses:
+      SUCCESS:
+        description: Success
+        content:
+          application/json:
+            schema:
+              type: null
+              example: null
+      ERROR_2:
+        description: You can not like/pass yourself
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: object
+              example:
+                errors:
+                  code: 2
+                  message: You can not like/pass yourself
+
+/api/user/pass:
+  post:
+    tags:
+      - "User"
+    summary: Pass a person
+    description: Pass a person
+    parameters:
+      - in: header
+        name: userId
+        schema:
+          type: string
+          format: integer
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            required:
+              - targetId
+            properties:
+              targetId:
+                type: number
+                example: 2
+    responses:
+      SUCCESS:
+        description: Success
+        content:
+          application/json:
+            schema:
+              type: null
+              example: null
+      ERROR_2:
+        description: You can not like/pass yourself
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                error:
+                  type: object
+              example:
+                errors:
+                  code: 2
+                  message: You can not like/pass yourself

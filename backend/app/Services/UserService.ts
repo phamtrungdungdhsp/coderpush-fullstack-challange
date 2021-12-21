@@ -1,9 +1,10 @@
 import { ModelPaginatorContract } from '@ioc:Adonis/Lucid/Orm'
 import CustomException from 'App/Exceptions/CustomException'
-import { HTTP_CODES } from '../../constants/Enum'
-import { USER_NOT_FOUND } from '../../constants/LogicalError'
+import { EAction, HTTP_CODES } from '../../constants/Enum'
+import { ACTION_FORBIDDEN, USER_NOT_FOUND } from '../../constants/LogicalError'
 import { camelPagination } from '../../constants/DatabaseConstant'
 import User from '../Models/User'
+import Action from '../Models/Action'
 import Database from '@ioc:Adonis/Lucid/Database'
 import { snakeToCamel } from 'App/Helpers'
 
@@ -46,5 +47,43 @@ export default class UserService {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
     }
     return user
+  }
+
+  /**
+   * like person
+   * @param userId
+   * @param targetId
+   * @return Promise<void>
+   */
+  public async likePerson (userId: number, targetId: number): Promise<void> {
+    if (targetId === userId) {
+      throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
+     }
+    // Don't need to check where userId existed or not, it was already checked in middleware
+    const target: User|null = await User.find(userId);
+    if (!target) {
+      throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
+    }
+    await Action.create({ host: userId, target: targetId, action: EAction.like })
+    // TODO: Check if it's match
+  }
+
+  
+  /**
+   * pass person
+   * @param userId
+   * @param targetId
+   * @return Promise<void>
+   */
+  public async passPerson (userId: number, targetId: number): Promise<void> {
+    if (targetId === userId) {
+      throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
+    }
+    // Don't need to check where userId existed or not, it was already checked in middleware
+    const target: User|null = await User.find(userId);
+    if (!target) {
+      throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
+    }
+    await Action.create({ host: userId, target: targetId, action: EAction.pass })
   }
 }

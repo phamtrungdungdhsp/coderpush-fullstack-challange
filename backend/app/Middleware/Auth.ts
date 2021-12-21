@@ -14,6 +14,7 @@ export default class Auth {
     if (!user) {
       throw new CustomException(HTTP_CODES.AUTHORIZATION_ERROR)
     }
+    request.auth = user.toJSON()
     await next()
   }
 }

@@ -1,6 +1,7 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import UserService from 'App/Services/UserService'
 import { formatPageAndLimit } from 'App/Helpers'
+import TargetValidator from 'App/Validators/TargetValidator'
 export default class UsersController {
   private userService = new UserService()
 
@@ -21,7 +22,7 @@ export default class UsersController {
    * @returns Promise<any>
    */
   public async getUser ({ request, response }: HttpContextContract) {
-    const userId = request.header('userId') || 1
+    const { id: userId } = request.auth
     const { page, limit } = formatPageAndLimit(request.only(['page', 'limit']))
     const data = await this.userService.getUser(+userId, page, limit)
     return response.status(200).json(data)
@@ -37,5 +38,31 @@ export default class UsersController {
     const { userId } = params
     const data = await this.userService.getDetail(+userId)
     return response.status(200).json(data)
+  }
+
+  /**
+   * like person
+   * @param request
+   * @param response
+   * @returns Promise<void>
+   */
+  public async likePerson ({ request, response }: HttpContextContract) {
+    const { id: userId } = request.auth
+    const { targetId } = await request.validate(TargetValidator)
+    await this.userService.likePerson(userId, targetId)
+    return response.status(200).json({ data: null })
+  }
+
+  /**
+   * pass person
+   * @param request
+   * @param response
+   * @returns Promise<void>
+   */
+  public async passPerson ({ request, response }: HttpContextContract) {
+    const { id: userId } = request.auth
+    const { targetId } = await request.validate(TargetValidator)
+    await this.userService.likePerson(userId, targetId)
+    return response.status(200).json({ data: null })
   }
 }

@@ -30,6 +30,8 @@ Route.post('/sign-in', 'UserController.signIn').prefix(API_PREFIX)
 Route.group(() => {
   Route.get('/users', 'UserController.getUser')
   Route.get('/user/:userId', 'UserController.getDetail')
+  Route.post('/user/like', 'UserController.likePerson')
+  Route.post('/user/:userId', 'UserController.passPerson')
 })
   .middleware(['auth'])
   .prefix(API_PREFIX)
