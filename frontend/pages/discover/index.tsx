@@ -17,7 +17,6 @@ const Discover = () => {
   }
 
   const like = (): void => {
-    // TODO: Call api /like
     ref.current?.swipe('right')
   }
   return (

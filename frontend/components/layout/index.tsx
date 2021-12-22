@@ -6,6 +6,8 @@ import styles from './layout.module.scss'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faThumbsUp, faHeart, faComment } from '@fortawesome/free-solid-svg-icons'
 import { signIn } from '../../lib/user'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 const Layout: NextComponentType = ({ children }) => {
   useEffect(() => {
     const userId = localStorage.getItem('userId')
@@ -16,6 +18,7 @@ const Layout: NextComponentType = ({ children }) => {
   const router = useRouter()
   return (
     <div className={styles.wrapper}>
+      <ToastContainer />
       <div className={styles.container}>
         <ul className={styles.navLink}>
           <li>

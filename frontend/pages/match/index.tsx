@@ -2,14 +2,14 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Layout from '../../components/layout'
 import styles from './matches.module.scss'
-import { getUsers } from '../../lib/user'
+import { getMatchedUser } from '../../lib/user'
 import Loader from '../../components/loader'
 import ScrollBottom from '../../components/scroll-bottom'
 import { handleName } from '../../helpers/common'
 import { IUser } from '../../interfaces/common'
 
 const List = ({ page }: { page: number }) => {
-  const { listUser, isLoading }: { listUser: IUser[], isLoading: boolean } = getUsers(page || 1)
+  const { listUser, isLoading }: { listUser: IUser[], isLoading: boolean } = getMatchedUser(page || 1)
   if (isLoading) {
     return (
       <div className="backdrop">
@@ -22,8 +22,13 @@ const List = ({ page }: { page: number }) => {
   
   return (
     <>
+      {listUser.length === 0 && (
+        <li className={styles.empty}>
+          <p>Empty</p>
+        </li>
+      )}
       {
-        listUser.length && listUser.map((person: IUser, index: number) => (
+        listUser.length > 0 && listUser.map((person: IUser, index: number) => (
           <li className={styles.item} key={index}>
             <div className={styles.image}>
               <Image src={person.picture} layout="fill" objectFit="cover" className={styles.img} alt={person.id} loading="lazy"/>
@@ -51,8 +56,8 @@ const Matches = () => {
         <p className={styles.title}>Match: </p>
         <div className={styles.container}>
           <ScrollBottom customClass={`${styles.list}`} onTouchBottom={() => setPage(page + 1)}>
-              {pages}
-            </ScrollBottom>
+            {pages}
+          </ScrollBottom>
         </div>
       </div>
 

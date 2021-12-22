@@ -29,8 +29,14 @@ export default class UserService {
    * @returns Promise<any>
    */
   public async getUser (userId: number, page = 1, limit = 10): Promise<ModelPaginatorContract<User>> {
+    const filter: Action[] = await Action.query()
+      .where({ host: userId })
+      .select('target')
+    const ids: number[] = filter.map((item: Action) => item.target)
+    
     const result = await User.query()
       .whereNot('id', userId)
+      .whereNotIn('id', ids)
       .orderBy('id', 'desc')
       .paginate(page, limit)
     result.namingStrategy = camelPagination
@@ -56,9 +62,8 @@ export default class UserService {
    * @param targetId
    * @return Promise<void>
    */
-  public async likePerson (userId: number, targetId: number): Promise<void> {
-    console.log('go sss');
-    
+  public async likePerson (userId: number, targetId: number): Promise<{ match: boolean }> {
+    let match: boolean = false
     if (targetId === userId) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
      }
@@ -67,17 +72,22 @@ export default class UserService {
     if (!target) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
     }
-    await Action.updateOrCreate({ host: userId }, { target: targetId, action: EAction.like })
+    await Action.updateOrCreate({ host: userId, target: targetId }, { target: targetId, action: EAction.like })
     
     // Check if target liked userId, if yes => create match record
     const liked: Action|null = await Action
       .query()
-      .where({ target: userId })
+      .where({ host: targetId, target: userId })
       .first()
     if (liked) {
       // firstUser always be less than secondUser
-      await Match.updateOrCreate({ firstUser: userId > targetId ? targetId : userId }, { secondUser:  userId > targetId ? userId : targetId })
+      const firstUser: number = userId > targetId ? targetId : userId
+      const secondUser: number = userId > targetId ? userId : targetId
+      
+      await Match.updateOrCreate({ firstUser,  secondUser }, { })
+      match = true
     }
+    return { match }
   }
 
   
@@ -88,9 +98,6 @@ export default class UserService {
    * @return Promise<void>
    */
   public async passPerson (userId: number, targetId: number): Promise<void> {
-
-    console.log('go ss');
-    
     if (targetId === userId) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, ACTION_FORBIDDEN)
     }
@@ -99,7 +106,7 @@ export default class UserService {
     if (!target) {
       throw new CustomException(HTTP_CODES.BAD_REQUEST, USER_NOT_FOUND)
     }
-    await Action.create({ host: userId, target: targetId, action: EAction.pass })
+    await Action.updateOrCreate({ host: userId, target: targetId }, { action: EAction.pass })
   }
 
   /**
@@ -110,12 +117,14 @@ export default class UserService {
    * @returns 
    */
   public async getListLikedPersons (userId: number, page: number, limit: number): Promise<ModelPaginatorContract<Action>> {
-    const result = await Action
+    const result: any = await Action
       .query()
       .preload('user')
       .where({ host: userId, action: EAction.like })
       .orderBy('id', 'desc')
       .paginate(page, limit)
+      
+    result.rows = result.rows.map((item: any) => item.user)
     result.namingStrategy = camelPagination
     return result
   }

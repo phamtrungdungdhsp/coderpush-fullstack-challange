@@ -23,8 +23,6 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   public async handle (error: any, ctx: HttpContextContract) {
-    console.log('go here')
-    console.log(error)
     return ctx.response
       .status(error.status || 500)
       .json({ error: error.data })

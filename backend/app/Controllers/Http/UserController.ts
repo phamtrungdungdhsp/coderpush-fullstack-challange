@@ -49,8 +49,8 @@ export default class UsersController {
   public async likePerson ({ request, response }: HttpContextContract) {
     const { id: userId } = request.auth
     const { targetId } = await request.validate(TargetValidator)
-    await this.userService.likePerson(userId, targetId)
-    return response.status(200).json({ data: null })
+    const data = await this.userService.likePerson(userId, targetId)
+    return response.status(200).json(data)
   }
 
   /**

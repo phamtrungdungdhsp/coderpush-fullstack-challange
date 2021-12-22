@@ -11,13 +11,22 @@
     transform: translate(-50%, -50%);
   }
   .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
     gap: 0.5em;
-    height: inherit;
 
     .image {
+      width: 48%;
       cursor: pointer;
     }
+  }
+  .empty {
+    height: 2em;
+    display: inline-block;
+    width: 100%;
+    font-weight: 450;
+    text-align: center;
   }
 }
